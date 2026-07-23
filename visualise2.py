@@ -42,7 +42,7 @@ def load_sea_level_data():
         df.dropna(subset=["year"], inplace=True)
 
         yearly = (
-            df.groupby("year")["OBS_VALUE"]
+            df.groupby(["year"])["OBS_VALUE"]   # this is across all regions, we should probably disaggregate
             .mean()
             .reset_index()
             .rename(columns={"OBS_VALUE": "sea_level"})
@@ -50,7 +50,7 @@ def load_sea_level_data():
         yearly["year"] = yearly["year"].astype(int)
         return yearly.sort_values("year")
     except Exception as e:
-        st.warning(f"Couldn't load live sea level data ({e}). Using placeholder values instead.")
+        st.warning(f"Couldn't load live sea level data ({e}).")
 
 
 @st.cache_data
